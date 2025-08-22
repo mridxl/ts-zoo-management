@@ -4,7 +4,7 @@ import { CustomError } from "../utlis";
 import { prisma } from "../prisma";
 import { compare, hash } from "bcryptjs";
 import config from "../config/config";
-import jwt from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 
 const JWT_SECRET = config.JWT_SECRET;
 
@@ -56,6 +56,11 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             next(error)
             return;
         }
+
+        res.status(201).json({
+            status: "success",
+            message: "Admin Created Successfully"
+        })
     } catch (err) {
         const error = new CustomError("Something went wrong");
         error.statusCode = 500;
@@ -105,7 +110,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             return;
         }
 
-        const token = jwt.sign({ id: admin.id }, JWT_SECRET as string);
+        const token = sign({ id: admin.id }, JWT_SECRET as string);
 
         res.status(200).json({
             status: "success",
