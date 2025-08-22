@@ -15,8 +15,6 @@ const registerSchema = z.object({
 });
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password } = req.body;
-
     const parsedData = registerSchema.safeParse(req.body);
 
     // zod validation
@@ -75,8 +73,6 @@ const loginSchema = z.object({
 });
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
-
     const parsedData = loginSchema.safeParse(req.body);
 
     // zod validation
@@ -101,7 +97,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             return;
         }
 
-        const isPasswordValid = await compare(password, admin.password);
+        const isPasswordValid = await compare(parsedData.data.password, admin.password);
 
         if (!isPasswordValid) {
             const error = new CustomError("Invalid Credentials");

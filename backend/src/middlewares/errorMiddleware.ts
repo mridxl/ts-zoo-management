@@ -1,19 +1,20 @@
-import type { Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import type { CustomError } from "../utlis";
-
 
 const errorMiddleware = (
   err: CustomError,
+  req: Request,
   res: Response,
+  next: NextFunction
 ) => {
-    let statusCode = err.statusCode || 500;
-    let message = err.message || "Something went wrong!";
-    let status = "failed";
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Something went wrong!";
+  const status = "failed";
 
-    res.status(statusCode).json({
+  res.status(statusCode).json({
     status,
     message,
   });
-}
+};
 
 export default errorMiddleware;

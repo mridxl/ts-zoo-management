@@ -57,7 +57,7 @@ export const getAnimals = async (req: Request, res: Response, next: NextFunction
                 ...(health_status?  {health_status: health_status as HealthStatus } : {}),
             }
         })
-
+        
         res.status(200).json({
             status: "success",
             count: animals.length,
@@ -80,6 +80,13 @@ export const getAnimal = async (req: Request, res: Response, next: NextFunction)
                 id
             }
         })
+
+        if (!animal) {
+            const error = new CustomError("Animal not found");
+            error.statusCode = 404;
+            next(error);
+            return;
+        }
 
         res.status(200).json({
             status: "success",
@@ -106,6 +113,17 @@ export const updateAnimal = async (req: Request, res: Response, next: NextFuncti
     }
 
     try {
+        const existingAnimal = await prisma.animal.findUnique({
+            where: { id }
+        });
+
+        if (!existingAnimal) {
+            const error = new CustomError("Animal not found");
+            error.statusCode = 404;
+            next(error);
+            return;
+        }
+
         const animal: Animal = await prisma.animal.update({
             where: {
                 id
@@ -130,6 +148,17 @@ export const deleteAnimal = async (req: Request, res: Response, next: NextFuncti
     const { id } = req.params;
 
     try {
+        const existingAnimal = await prisma.animal.findUnique({
+            where: { id }
+        });
+
+        if (!existingAnimal) {
+            const error = new CustomError("Animal not found");
+            error.statusCode = 404;
+            next(error);
+            return;
+        }
+
         const animal: Animal = await prisma.animal.delete({
             where: {
                 id
