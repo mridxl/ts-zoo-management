@@ -6,3 +6,5 @@ const router = Router();
 
 router.use('/auth', authRouter);
 router.use('/animal', animalRouter);
+
+export default router;

@@ -1,6 +1,7 @@
-const { PORT, JWT_SRCRET} = process.env;
+const { PORT, JWT_SECRET, BUN_ENV} = process.env;
 
 export default {
     PORT,
-    JWT_SRCRET
+    JWT_SECRET,
+    BUN_ENV,
 }
