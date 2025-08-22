@@ -5,7 +5,7 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 const animalRouter = Router();
 
 animalRouter.post("/add", authMiddleware, addAnimal);
-animalRouter.get("/?:species&:health_status", authMiddleware, getAnimals);
+animalRouter.get("/", authMiddleware, getAnimals);
 animalRouter.get("/:id", authMiddleware, getAnimal);
 animalRouter.patch("/:id", authMiddleware, updateAnimal);
 animalRouter.delete("/:id", authMiddleware, deleteAnimal);
