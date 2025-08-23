@@ -7,7 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Admin {
+model Staff {
   id        String      @id @default(uuid())
   email     String      @unique
   name      String

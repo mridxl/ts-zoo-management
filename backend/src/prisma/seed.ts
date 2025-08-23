@@ -2,7 +2,7 @@ import { prisma } from "./index";
 
 async function main() {
   // Seed Admins
-  await prisma.admin.createMany({
+  await prisma.staff.createMany({
     data: [
       {
         name: "John",

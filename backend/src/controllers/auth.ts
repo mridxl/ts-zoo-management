@@ -25,13 +25,13 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         return;
     }
     try {
-        const adminExist = await prisma.admin.findUnique({
+        const staffExist = await prisma.staff.findUnique({
             where: {
                 email: parsedData.data.email
             }
         })
 
-        if (adminExist) {
+        if (staffExist) {
             const error = new CustomError("Email Address already exists");
             error.statusCode = 400;
             next(error)
@@ -40,7 +40,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
         const hashedPassword = await hash( parsedData.data.password, 10);
 
-        const admin = await prisma.admin.create({
+        const staff = await prisma.staff.create({
             data: {
                 name: parsedData.data.name,
                 email: parsedData.data.email,
@@ -48,7 +48,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             }
         })  
 
-        if (!admin) {
+        if (!staff) {
             const error = new CustomError("Something went wrong");
             error.statusCode = 500;
             next(error)
@@ -57,7 +57,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
         res.status(201).json({
             status: "success",
-            message: "Admin Created Successfully"
+            message: "Staff Created Successfully"
         })
     } catch (err) {
         const error = new CustomError("Something went wrong");
@@ -84,20 +84,20 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }   
 
     try {   
-        const admin = await prisma.admin.findUnique({
+        const staff = await prisma.staff.findUnique({
             where: {
                 email: parsedData.data.email
             }
         })
 
-        if (!admin) {
+        if (!staff) {
             const error = new CustomError("Invalid Credentials");
             error.statusCode = 400;
             next(error)
             return;
         }
 
-        const isPasswordValid = await compare(parsedData.data.password, admin.password);
+        const isPasswordValid = await compare(parsedData.data.password, staff.password);
 
         if (!isPasswordValid) {
             const error = new CustomError("Invalid Credentials");
@@ -106,7 +106,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             return;
         }
 
-        const token = sign({ id: admin.id }, JWT_SECRET as string);
+        const token = sign({ id: staff.id }, JWT_SECRET as string);
 
         res.status(200).json({
             status: "success",
